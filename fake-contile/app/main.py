@@ -31,19 +31,19 @@ EXAMPLE_TILES = yaml.safe_load(
     """
 tiles:
   - id: 12345
-    name: 'Example COM'
+    name: 'Example'
     click_url: 'https://example.com/desktop_windows?version=16.0.0&key=22.1&ci=6.2&ctag=1612376952400200000'
     image_url: 'https://example.com/desktop_windows01.jpg'
     impression_url: 'https://example.com/desktop_windows?id=0001'
     url: 'https://www.example.com/desktop_windows'
     position: 1
   - id: 56789
-    name: 'Example ORG'
-    click_url: 'https://example.org/desktop_windows?version=16.0.0&key=7.2&ci=8.9&ctag=E1DE38C8972D0281F5556659A'
-    image_url: 'https://example.org/desktop_windows02.jpg'
-    impression_url: 'https://example.org/desktop_windows?id=0002'
-    url: 'https://www.example.org/desktop_windows'
-    position: 1
+    name: 'Raphael Blog'
+    click_url: 'https://raphael.codes/desktop_windows?version=16.0.0&key=7.2&ci=8.9&ctag=E1DE38C8972D0281F5556659A'
+    image_url: 'https://raphael.codes/desktop_windows02.jpg'
+    impression_url: 'https://raphael.codes/desktop_windows?id=0002'
+    url: 'https://www.raphael.codes/desktop_windows'
+    position: 2
 """
 )
 
