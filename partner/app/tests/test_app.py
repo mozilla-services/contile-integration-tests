@@ -95,15 +95,16 @@ def test_read_tilesp_validate_sub2(client, sub2):
 
 
 @pytest.mark.parametrize(
-    "country-code",
+    "country_code",
     [
         "invalid-param",
-        "abc",
+        "us",
+        "USAC",
         "🛒📈🤖",
     ],
-    ids=["hyphen_in_value", "exceeds_max_characters", "emoji"],
+    ids=["hyphen_in_value", "all lowercase", "exceeds_max_characters", "emoji"],
 )
-def test_read_tilesp_validate_country_code(client, countryCode):
+def test_read_tilesp_validate_country_code(client, country_code):
     """Test that only two characters are
     accepted as values for the country code query parameter.
 
@@ -115,7 +116,7 @@ def test_read_tilesp_validate_country_code(client, countryCode):
             "partner": "demofeed",
             "sub1": "123456789",
             "sub2": "sub2",
-            "country-code": countryCode,
+            "country-code": country_code,
             "region-code": "NY",
             "form-factor": "desktop",
             "os-family": "macos",
