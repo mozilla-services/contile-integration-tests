@@ -24,7 +24,7 @@ def test_read_tilesp(client):
             "sub1": "123456789",
             "sub2": "placement1",
             "country-code": "US",
-            "region-code": "NY",
+            "region-code": "US-NY",
             "form-factor": "desktop",
             "os-family": "macos",
             "v": "1.0",
@@ -78,6 +78,55 @@ def test_read_tilesp_validate_sub2(client, sub2):
             "sub2": sub2,
             "country-code": "US",
             "region-code": "NY",
+            "form-factor": "desktop",
+            "os-family": "macos",
+            "v": "1.0",
+            "results": "2",
+        },
+    )
+
+    assert response.status_code == 400
+
+    response_content = response.json()
+    assert "tiles" not in response_content
+    assert "status" in response_content
+    assert "count" in response_content
+    assert "response" in response_content
+
+
+@pytest.mark.parametrize(
+    "region_code",
+    [
+        "USAZ",
+        "USA-12AS",
+        "Us-AZ1",
+        "1U-AZ",
+        "us-az",
+        "🛒📈🤖",
+    ],
+    ids=[
+        "no_hyphen_in_value",
+        "exceeds_max_characters",
+        "lower_cases_for_country_code",
+        "numeric_country_code",
+        "all_lowercase",
+        "emoji",
+    ],
+)
+def test_read_tilesp_validate_region_code(client, region_code):
+    """Test that only formats conforming to ISO 3166-2 (XX-XXX) is
+    accepted as values for the region_code query parameter.
+
+    See https://github.com/mozilla-services/contile-integration-tests/issues/40
+    """
+    response = client.get(
+        "/tilesp",
+        params={
+            "partner": "demofeed",
+            "sub1": "123456789",
+            "sub2": "sub2",
+            "country-code": "US",
+            "region-code": region_code,
             "form-factor": "desktop",
             "os-family": "macos",
             "v": "1.0",
