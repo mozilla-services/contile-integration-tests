@@ -105,7 +105,7 @@ def test_read_tilesp_validate_sub2(client, sub2):
     ids=["hyphen_in_value", "all lowercase", "exceeds_max_characters", "emoji"],
 )
 def test_read_tilesp_validate_country_code(client, country_code):
-    """Test that only two characters are
+    """Test that only two uppercase characters are
     accepted as values for the country code query parameter.
 
     See https://github.com/mozilla-services/contile-integration-tests/issues/39
