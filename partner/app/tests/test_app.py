@@ -97,6 +97,65 @@ def test_read_tilesp_validate_sub2(client, sub2):
 @pytest.mark.parametrize(
     "region_code",
     [
+        ("CA", "BC"),
+        ("DE", "BE"),
+        ("GB", "SCT"),
+        ("FR", "BRE"),
+        ("AU", "WA"),
+        ("IT", "52"),
+        ("MX", "CHH"),
+        ("IN", "PB"),
+        ("BR", "RJ"),
+        ("ES", "M"),
+    ],
+)
+def test_read_tilesp_accepted_region_code(client, region_code):
+    """Test that the API endpoint accepts region codes from countries Contile
+    has been rolled out to for the region-code query parameter.
+
+    See https://github.com/mozilla-services/contile-integration-tests/issues/40
+    """
+    response = client.get(
+        "/tilesp",
+        params={
+            "partner": "demofeed",
+            "sub1": "123456789",
+            "sub2": "sub2",
+            "country-code": "country_code",
+            "region-code": region_code,
+            "form-factor": "desktop",
+            "os-family": "macos",
+            "v": "1.0",
+            "results": "2",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "tiles": [
+            {
+                "id": 12346,
+                "name": "Example COM",
+                "click_url": "https://example.com/desktop_macos?version=16.0.0&key=22.1&ci=6.2&ctag=1612376952400200000",
+                "image_url": "https://example.com/desktop_macos01.jpg",
+                "impression_url": "https://example.com/desktop_macos?id=0001",
+                "advertiser_url": "https://www.example.com/desktop_macos",
+            },
+            {
+                "id": 56790,
+                "name": "Example ORG",
+                "click_url": "https://example.org/desktop_macos?version=16.0.0&key=7.2&ci=8.9&ctag=E1DE38C8972D0281F5556659A",
+                "image_url": "https://example.org/desktop_macos02.jpg",
+                "impression_url": "https://example.org/desktop_macos?id=0002",
+                "advertiser_url": "https://www.example.org/desktop_macos",
+            },
+        ]
+    }
+
+
+@pytest.mark.parametrize(
+    "region_code",
+    [
         "US-AZ",
         "12AS",
         "ny",
