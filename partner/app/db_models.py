@@ -16,7 +16,3 @@ class RequestValue(Base):
     form_factor = Column(String, unique=True, index=True)
     os_family = Column(String, unique=True, index=True)
     # ff_version = Column(Numeric(2,2), unique=True, index=True)
-
-
-
-
