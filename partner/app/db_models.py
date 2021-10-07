@@ -6,11 +6,10 @@ from sqlalchemy import Column, Integer, String, Numeric
 
 from database import Base
 
+# Creating a table structure with columns referring to query params
+class RequestValue(Base):
+    __tablename__ = "request_value"
 
-class User(Base):
-    __tablename__ = "request_parameter"
-
-    http_method = Column(String, index=True)
     country_code = Column(String, unique=True, index=True)
     region_code = Column(String, unique=True, index=True)
     dma_code = Column(Integer, unique=True, index=True)

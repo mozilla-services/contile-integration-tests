@@ -10,11 +10,12 @@ import pathlib
 import sys
 import db_models
 
-from fastapi import FastAPI, Query, Request, Response, status
+from fastapi import FastAPI, Query, Request, Response, status, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from models import Tiles
+from db_models import RequestValue
 from responses import LoaderConfig, load_responses
 from database import SessionLocal, engine
 from sqlalchemy.orm import Session
@@ -37,6 +38,14 @@ LOADER_CONFIG = LoaderConfig(RESPONSES_DIR)
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# Creating a Dependency for db connection
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # This is only included for client errors such as invalid query parameter values
 # or unknown query parameters.
@@ -96,6 +105,8 @@ ACCEPTED_QUERY_PARAMS = [
 async def read_tilesp(
     request: Request,
     response: Response,
+    # For DB sessions
+    db: Session = Depends(get_db)
     partner: str = Query(..., example="demofeed"),
     sub1: str = Query(..., example="123456789"),
     sub2: str = Query(
@@ -120,6 +131,18 @@ async def read_tilesp(
     results: int = Query(1, example=2),
 ):
     """Endpoint for requests from Contile."""
+
+    # Matching the request header sent via client with the table columns and storing the values in db
+    request_value = RequestValue()
+    request_value.country_code = request.country_code
+    request_value.region_code = request.region_code
+    request_value.dma_code = request.dma_code
+    request_value.form_factor = request.form_factor
+    request_value.os_family = request.os_family
+
+    db.add(request_value)
+    db.commit()
+
 
     unknown_query_params = [
         param for param in request.query_params if param not in ACCEPTED_QUERY_PARAMS

@@ -6,4 +6,3 @@ mypy
 pytest
 requests
 types-PyYAML
-sqlalchemy
