@@ -106,7 +106,7 @@ async def read_tilesp(
     request: Request,
     response: Response,
     # For DB sessions
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
     partner: str = Query(..., example="demofeed"),
     sub1: str = Query(..., example="123456789"),
     sub2: str = Query(
