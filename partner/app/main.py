@@ -8,13 +8,17 @@ import logging
 import os
 import pathlib
 import sys
+import db_models
 
-from fastapi import FastAPI, Query, Request, Response, status
+from fastapi import FastAPI, Query, Request, Response, status, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from models import Tiles
+from db_models import ContileRequest
 from responses import LoaderConfig, load_responses
+from database import SessionLocal, engine
+from sqlalchemy.orm import Session
 
 logger = logging.getLogger("partner")
 
@@ -31,7 +35,17 @@ if not scenarios_files:
 
 LOADER_CONFIG = LoaderConfig(RESPONSES_DIR)
 
+models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
+
+# Creating a Dependency for db connection
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # This is only included for client errors such as invalid query parameter values
 # or unknown query parameters.
