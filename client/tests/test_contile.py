@@ -42,9 +42,10 @@ def test_contile(contile_host: str, steps: List[Step]):
             # If the response status code is 200 OK, load the response content
             # into a Python dict and generate a dict from the response model
             resp = step.response.content
-            if not(isinstance(resp, dict)):
+            if not (isinstance(resp, dict)):
                 resp = resp.dict()
             assert r.json() == resp
+            continue
 
         if r.status_code == 204:
             # If the response status code is 204 No Content, load the response content
