@@ -41,10 +41,11 @@ def test_contile(contile_host: str, steps: List[Step]):
         if r.status_code == 200:
             # If the response status code is 200 OK, load the response content
             # into a Python dict and generate a dict from the response model
-            resp = step.response.content
-            if not (isinstance(resp, dict)):
-                resp = resp.dict()
-            assert r.json() == resp
+            try:
+                assert r.json() == step.response.content.dict()
+            except AttributeError as e:
+                print("Response failed to resolve into a Tile object. Have the response fields changed?")
+                raise
             continue
 
         if r.status_code == 204:
