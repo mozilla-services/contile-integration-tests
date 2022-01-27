@@ -44,7 +44,9 @@ def test_contile(contile_host: str, steps: List[Step]):
             try:
                 assert r.json() == step.response.content.dict()
             except AttributeError as e:
-                print("Response failed to resolve into a Tile object. Have the response fields changed?")
+                print(
+                    "Response failed to resolve into a Tile object. Have the response fields changed?"
+                )
                 raise
             continue
 
