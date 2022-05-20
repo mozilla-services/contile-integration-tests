@@ -20,7 +20,7 @@ pluggy==0.13.1
     # via pytest
 py==1.10.0
     # via pytest
-pydantic==1.9.0
+pydantic==1.9.1
     # via -r requirements.in
 pyparsing==2.4.7
     # via packaging
